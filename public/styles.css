@@ -8,7 +8,7 @@
   html, body {
     height: 100%;
     font-family: 'Segoe UI', sans-serif;
-    background-image: url('images/background.jpg'); /* Make sure this exists */
+    background-image: url('images/little-prince.jpg'); /* Make sure this exists */
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
