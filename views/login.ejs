@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <!-- Optional: Add CSS links or other head content here -->
+</head>
+<body>
+
+  <h1><%= title %></h1>
+
+  <!-- Flash message support (if you pass messages to the view) -->
+  <% if (messages && messages.error) { %>
+    <div class="flash-error" style="color: red;">
+      <%= messages.error %>
+    </div>
+  <% } %>
+  <% if (messages && messages.success) { %>
+    <div class="flash-success" style="color: green;">
+      <%= messages.success %>
+    </div>
+  <% } %>
+
+  <!-- Login form -->
+  <form action="/account/login" method="POST">
+    <div>
+      <label for="email">Email:</label><br />
+      <input type="email" id="email" name="email" required />
+    </div>
+    <div>
+      <label for="password">Password:</label><br />
+      <input type="password" id="password" name="password" required />
+    </div>
+    <div>
+      <button type="submit">Login</button>
+    </div>
+  </form>
+
+  <!-- Link to registration page -->
+  <p>
+    Don't have an account? <a href="/account/register">Register here</a>
+  </p>
+
+</body>
+</html>
