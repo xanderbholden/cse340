@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= car.inv_make %> <%= car.inv_model %> — Listing Details</title>
+  <!-- Add your CSS / link to stylesheets as needed -->
+</head>
+<body>
+
+  <h1><%= car.inv_make %> <%= car.inv_model %> — Details</h1>
+
+  <section>
+    <h2>Car Information</h2>
+    <p><strong>Year:</strong> <%= car.inv_year %></p>
+    <p><strong>Price:</strong> $<%= car.inv_price %></p>
+    <p><strong>Miles:</strong> <%= car.inv_miles %></p>
+    <p><strong>Color:</strong> <%= car.inv_color %></p>
+    <p><strong>Description:</strong> <%= car.inv_description %></p>
+    <% if (car.inv_image) { %>
+      <img src="<%= car.inv_image %>" alt="Car image" style="max-width:400px;" />
+    <% } %>
+  </section>
+
+  <hr>
+
+  <section>
+    <h2>Aftermarket Parts / Modifications</h2>
+    <% if (parts && parts.length > 0) { %>
+      <ul>
+        <% parts.forEach(part => { %>
+          <li>
+            <strong><%= part.part_name %></strong>
+            <% if (part.part_description) { %> — <%= part.part_description %><% } %>
+          </li>
+        <% }) %>
+      </ul>
+    <% } else { %>
+      <p>No aftermarket parts listed for this car.</p>
+    <% } %>
+  </section>
+
+  <hr>
+
+  <section>
+    <h2>Add a New Part / Modification</h2>
+    <form action="/inventory/<%= car.inv_id %>/parts/add" method="POST">
+      <label>
+        Part Name:<br>
+        <input type="text" name="part_name" required />
+      </label>
+      <br><br>
+      <label>
+        Description (optional):<br>
+        <textarea name="part_description" rows="3" cols="40"></textarea>
+      </label>
+      <br><br>
+      <button type="submit">Add Part</button>
+    </form>
+  </section>
+
+</body>
+</html>
