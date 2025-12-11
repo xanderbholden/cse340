@@ -1,16 +1,48 @@
-<%# Unit 3, Assignment 3, Task 1 %>
-<% if (title) { %>
-<h1><%= title %></h1>
-<% } else {
-  res.redirect('/')
-} %>
+<main id="inv-detail">
 
+  <% if (title) { %>
+    <h1><%= title %></h1>
+  <% } %>
 
+  <!-- VEHICLE DISPLAY -->
+  <% if (htmlData) { %>
+    <%- htmlData %>
+  <% } else { %>
+    <p class="notice">Vehicle information could not be displayed.</p>
+  <% } %>
 
-<% if(Object.entries(htmlData).length > 0){ %>
+  <hr>
 
-<%- htmlData %>
-<% } else { %>
-<p class="notice">Sorry, no matching vehicle could be found.</p>
-<% } %>
+  <!-- PARTS LIST -->
+  <h2>Aftermarket Parts & Modifications</h2>
 
+  <ul>
+    <% if (Array.isArray(parts) && parts.length > 0) { %>
+      <% parts.forEach(part => { %>
+        <li>
+          <strong><%= part.part_name %></strong><br>
+          <%= part.part_description %>
+        </li>
+      <% }) %>
+    <% } else { %>
+      <li>No parts have been added for this vehicle yet.</li>
+    <% } %>
+  </ul>
+
+  <hr>
+
+  <!-- ADD PART FORM -->
+  <h3>Add a New Part</h3>
+
+  <form action="/inv/detail/<%= vehicle.inv_id %>/parts/add" method="POST">
+
+    <label for="part_name">Part Name:</label><br>
+    <input type="text" id="part_name" name="part_name" required><br><br>
+
+    <label for="part_description">Description:</label><br>
+    <textarea id="part_description" name="part_description" required></textarea><br><br>
+
+    <button type="submit">Add Part</button>
+  </form>
+
+</main>

@@ -5,18 +5,41 @@ const invController = require("../controllers/invController")
 const utilities = require("../utilities")
 const invChecks = require("../utilities/inventory-validation")
 
-router.get("/type/:classificationId", invController.buildByClassificationId);
-
-
 /* ****************************************
- * Route to build vehicle detail view
+ * Build vehicles by classification
  **************************************** */
-router.get("/detail/:id", 
-utilities.handleErrors(invController.buildDetail))
+router.get("/type/:classificationId", 
+  invController.buildByClassificationId
+)
 
 /* ****************************************
- * Error Route
- * Assignment 3, Task 3
+ * Build vehicle detail view
+ **************************************** */
+router.get(
+  "/detail/:id", 
+  utilities.handleErrors(invController.buildDetail)
+)
+
+/* ****************************************
+ * ✨ Add a new part/modification to a vehicle
+ *  (AFTERMARKET PARTS FEATURE)
+ **************************************** */
+router.post(
+  "/detail/:id/parts/add",
+  utilities.checkLogin,  // require login (recommended)
+  utilities.handleErrors(async (req, res) => {
+    const inv_id = req.params.id
+    const { part_name, part_description } = req.body
+
+    const partsModel = require("../models/parts-model")
+    await partsModel.addPart(inv_id, part_name, part_description)
+
+    res.redirect(`/inv/detail/${inv_id}`)
+  })
+)
+
+/* ****************************************
+ * Error Route (Intentional error)
  **************************************** */
 router.get(
   "/broken",
@@ -25,8 +48,6 @@ router.get(
 
 /* ****************************************
  * Build Management View Route
- * Assignment 4, Task 1
- * checkAccountType added Unit 5, Assignment 5, Task 2
  **************************************** */
 router.get(
   "/",
@@ -36,8 +57,6 @@ router.get(
 
 /* ****************************************
  * Build add-classification View Route
- * Assignment 4, Task 2
- * checkAccountType added Unit 5, Assignment 5, Task 2
  **************************************** */
 router.get(
   "/newClassification",
@@ -45,11 +64,8 @@ router.get(
   utilities.handleErrors(invController.newClassificationView)
 )
 
-
 /* ****************************************
  * Process add-classification Route
- * Assignment 4, Task 2
- * checkAccountType added Unit 5, Assignment 5, Task 2
  **************************************** */
 router.post(
   "/addClassification",
@@ -61,8 +77,6 @@ router.post(
 
 /* ****************************************
  * Build add-vehicle View Route
- * Assignment 4, Task 3
- * checkAccountType added Unit 5, Assignment 5, Task 2
  **************************************** */
 router.get(
   "/newVehicle",
@@ -72,8 +86,6 @@ router.get(
 
 /* ****************************************
  * Process add-vehicle Route
- * Assignment 4, Task 3
- * checkAccountType added Unit 5, Assignment 5, Task 2
  **************************************** */
 router.post(
   "/addInventory",
@@ -84,8 +96,7 @@ router.post(
 )
 
 /* ****************************************
- * Get vehicles for AJAX Route
- * Unit 5, Select inv item activity
+ * Get vehicles for AJAX 
  **************************************** */
 router.get(
   "/getInventory/:classification_id",
@@ -95,8 +106,6 @@ router.get(
 
 /* ****************************************
  * Deliver the edit inventory view
- * Unit 5, Update Step 1 Activity
- * checkAccountType added Unit 5, Assignment 5, Task 2
  **************************************** */
 router.get(
   "/edit/:inv_id",
@@ -106,8 +115,6 @@ router.get(
 
 /* ****************************************
  * Process the edit inventory request
- * Unit 5, Update Step 2 Activity
- * checkAccountType added Unit 5, Assignment 5, Task 2
  **************************************** */
 router.post(
   "/update",
@@ -119,8 +126,6 @@ router.post(
 
 /* ****************************************
  * Deliver the delete confirmation view
- * Unit 5, Delete Activity
- * checkAccountType added Unit 5, Assignment 5, Task 2
  **************************************** */
 router.get(
   "/delete/:inv_id",
@@ -130,13 +135,11 @@ router.get(
 
 /* ****************************************
  * Process the delete inventory request
- * Unit 5, Delete Activity
- * checkAccountType added Unit 5, Assignment 5, Task 2
  **************************************** */
-router.post("/delete", 
-utilities.checkAccountType, 
-utilities.handleErrors(invController.deleteItem)
+router.post(
+  "/delete", 
+  utilities.checkAccountType, 
+  utilities.handleErrors(invController.deleteItem)
 )
-
 
 module.exports = router;
