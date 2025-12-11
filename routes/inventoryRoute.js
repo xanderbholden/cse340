@@ -1,6 +1,6 @@
 // Needed Resources 
 const express = require("express")
-const router = new express.Router() 
+const router = new express.Router()
 const invController = require("../controllers/invController")
 const utilities = require("../utilities")
 const invChecks = require("../utilities/inventory-validation")
@@ -8,34 +8,26 @@ const invChecks = require("../utilities/inventory-validation")
 /* ****************************************
  * Build vehicles by classification
  **************************************** */
-router.get("/type/:classificationId", 
-  invController.buildByClassificationId
+router.get(
+  "/type/:classificationId",
+  utilities.handleErrors(invController.buildByClassificationId)
 )
 
 /* ****************************************
  * Build vehicle detail view
  **************************************** */
 router.get(
-  "/detail/:id", 
+  "/detail/:id",
   utilities.handleErrors(invController.buildDetail)
 )
 
 /* ****************************************
- * ✨ Add a new part/modification to a vehicle
- *  (AFTERMARKET PARTS FEATURE)
+ * Add a new part to a vehicle
  **************************************** */
 router.post(
   "/detail/:id/parts/add",
-  utilities.checkLogin,  // require login (recommended)
-  utilities.handleErrors(async (req, res) => {
-    const inv_id = req.params.id
-    const { part_name, part_description } = req.body
-
-    const partsModel = require("../models/parts-model")
-    await partsModel.addPart(inv_id, part_name, part_description)
-
-    res.redirect(`/inv/detail/${inv_id}`)
-  })
+  utilities.checkLogin,
+  utilities.handleErrors(invController.addPart)
 )
 
 /* ****************************************
@@ -137,9 +129,9 @@ router.get(
  * Process the delete inventory request
  **************************************** */
 router.post(
-  "/delete", 
-  utilities.checkAccountType, 
+  "/delete",
+  utilities.checkAccountType,
   utilities.handleErrors(invController.deleteItem)
 )
 
-module.exports = router;
+module.exports = router
